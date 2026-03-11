@@ -37,21 +37,25 @@ import supybot.world as world
 
 # Use this for the version of this plugin.  You may wish to put a CVS keyword
 # in here if you're keeping the plugin in CVS or some similar system.
-__version__ = "2020.01.05+git"
+__version__ = "2025.08.26+git"
 
-__author__ = getattr(supybot.authors, 'jlu',
-                     supybot.Author('James Lu', 'jlu5', 'james@overdrivenetworks.com'))
+__author__ = getattr(
+    supybot.authors,
+    "jlu",
+    supybot.Author("James Lu", "jlu5", "james@overdrivenetworks.com"),
+)
 
 # This is a dictionary mapping supybot.Author instances to lists of
 # contributions.
 __contributors__ = {}
 
 # This is a url where the most recent plugin package can be downloaded.
-__url__ = 'https://github.com/jlu5/SupyPlugins/'
+__url__ = "https://github.com/jlu5/SupyPlugins/"
 
 from . import config
 from . import plugin
-from imp import reload
+from importlib import reload
+
 # In case we're being reloaded.
 reload(config)
 reload(plugin)
