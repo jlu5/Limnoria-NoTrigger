@@ -1,5 +1,15 @@
-NoTrigger is an anti-abuse plugin that modifies outFilter to prevent triggering other bots.
+<p align ="center">
+   <em>
+       NoTrigger is an anti-abuse plugin that modifies outFilter to prevent triggering other bots.
+   </em>
+</p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/python-3.9%2B-blue.svg" alt="Python">
+  <img src="https://img.shields.io/badge/limnoria-compatible-brightgreen.svg" alt="Limnoria">
+  <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
+</p
+ 
 ## Short description
 In short, NoTrigger works by:
 
