@@ -27,9 +27,6 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 ###
-import string
-from sys import version_info
-
 import supybot.utils as utils
 from supybot.commands import *
 import supybot.plugins as plugins
@@ -51,13 +48,9 @@ class NoTrigger(callbacks.Plugin):
     def __init__(self, irc):
         self.__parent = super(NoTrigger, self)
         self.__parent.__init__(irc)
-        # This appends the Unicode character 'ZERO WIDTH SPACE' (U+200B) for
+        # This appends the Unicode character 'ZERO WIDTH SPACE' (U+200B),
         # which is absolutely invisible and stops bots from being triggered by us.
-        if version_info[0] >= 3:
-            self.padchar = "\u200B"
-        else:
-            from codecs import unicode_escape_decode as u
-            self.padchar = u('\u200B')[0]
+        self.padchar = "\u200B"
 
     def isChanStripColor(self, irc, channel):
         """Returns whether the given channel has a color-stripping mode (usually

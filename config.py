@@ -35,7 +35,7 @@ import supybot.registry as registry
 try:
     from supybot.i18n import PluginInternationalization
     _ = PluginInternationalization('NoTrigger')
-except:
+except ImportError:
     # Placeholder that allows to run the plugin on a bot
     # without the i18n module
     _ = lambda x: x
