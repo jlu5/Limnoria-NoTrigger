@@ -33,9 +33,11 @@ import supybot.plugins as plugins
 import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
 import supybot.ircmsgs as ircmsgs
+
 try:
     from supybot.i18n import PluginInternationalization
-    _ = PluginInternationalization('NoTrigger')
+
+    _ = PluginInternationalization("NoTrigger")
 except ImportError:
     # Placeholder that allows to run the plugin on a bot
     # without the i18n module
@@ -50,14 +52,14 @@ class NoTrigger(callbacks.Plugin):
         self.__parent.__init__(irc)
         # This appends the Unicode character 'ZERO WIDTH SPACE' (U+200B),
         # which is absolutely invisible and stops bots from being triggered by us.
-        self.padchar = "\u200B"
+        self.padchar = "\u200b"
 
     def isChanStripColor(self, irc, channel):
         """Returns whether the given channel has a color-stripping mode (usually
         +c or +S, but configurable) set."""
         try:
             c = irc.state.channels[channel]
-            for item in self.registryValue('colorAware.modes'):
+            for item in self.registryValue("colorAware.modes"):
                 if item in c.modes:
                     return True
         except KeyError:
@@ -65,48 +67,70 @@ class NoTrigger(callbacks.Plugin):
         return False
 
     def outFilter(self, irc, msg):
-        if msg.command == 'PRIVMSG' and \
-                ircutils.isChannel(msg.args[0]) and \
-                self.registryValue('enable', msg.args[0]):
+        if (
+            msg.command == "PRIVMSG"
+            and ircutils.isChannel(msg.args[0])
+            and self.registryValue("enable", msg.args[0])
+        ):
             s = msg.args[1]
-            prefixes = self.registryValue('prefixes', msg.args[0])
-            suffixes = self.registryValue('suffixes', msg.args[0])
-            if self.registryValue('colorAware') and \
-                    self.isChanStripColor(irc, msg.args[0]) and \
-                    s.startswith(("\003", "\002", "\017", "\037", "\026")):
+            prefixes = self.registryValue("prefixes", msg.args[0])
+            suffixes = self.registryValue("suffixes", msg.args[0])
+            if (
+                self.registryValue("colorAware")
+                and self.isChanStripColor(irc, msg.args[0])
+                and s.startswith(("\003", "\002", "\017", "\037", "\026"))
+            ):
                 # \003 = Colour (Ctrl+K), \002 = Bold (Ctrl+B), \017 =
                 # Reset Formatting (Ctrl+O), \037 = Underline,
                 # \026 = Italic/Reverse video
-                self.log.debug("NoTrigger (%s/%s): prepending message with "
-                               "a space since our message begins with a "
-                               "formatting code and the channel seems to be "
-                               "blocking colors.", msg.args[0], irc.network)
+                self.log.debug(
+                    "NoTrigger (%s/%s): prepending message with "
+                    "a space since our message begins with a "
+                    "formatting code and the channel seems to be "
+                    "blocking colors.",
+                    msg.args[0],
+                    irc.network,
+                )
                 s = self.padchar + s
-            elif self.registryValue('spaceBeforeNicks', msg.args[0]) and \
-                    s.strip() and s.split()[0].endswith((",", ":")):
+            elif (
+                self.registryValue("spaceBeforeNicks", msg.args[0])
+                and s.strip()
+                and s.split()[0].endswith((",", ":"))
+            ):
                 # If the last character of the first word ends with a ',' or
                 # ':', prepend a space.
                 s = self.padchar + s
-                self.log.debug("NoTrigger (%s/%s): prepending message with "
-                               "a space due to config plugins.notrigger."
-                               "spaceBeforeNicks.", msg.args[0], irc.network)
+                self.log.debug(
+                    "NoTrigger (%s/%s): prepending message with "
+                    "a space due to config plugins.notrigger."
+                    "spaceBeforeNicks.",
+                    msg.args[0],
+                    irc.network,
+                )
             # Handle actions properly but destroy any other \001 (CTCP)
             # messages
-            if self.registryValue('blockCtcp', msg.args[0]) and \
-                    s.startswith("\001") and not s.startswith("\001ACTION"):
+            if (
+                self.registryValue("blockCtcp", msg.args[0])
+                and s.startswith("\001")
+                and not s.startswith("\001ACTION")
+            ):
                 s = s[1:-1]
-                self.log.debug("NoTrigger (%s/%s): blocking non-ACTION "
-                               "CTCP due to config "
-                               "plugins.notrigger.blockCtcp.", msg.args[0],
-                               irc.network)
-            if self.registryValue('blockBell', msg.args[0]):
-                s = s.replace('\x07', '')
+                self.log.debug(
+                    "NoTrigger (%s/%s): blocking non-ACTION "
+                    "CTCP due to config "
+                    "plugins.notrigger.blockCtcp.",
+                    msg.args[0],
+                    irc.network,
+                )
+            if self.registryValue("blockBell", msg.args[0]):
+                s = s.replace("\x07", "")
             if s.startswith(tuple(prefixes)):
                 s = self.padchar + s
             if s.endswith(tuple(suffixes)):
                 s += self.padchar
             msg = ircmsgs.privmsg(msg.args[0], s, msg=msg)
         return msg
+
 
 Class = NoTrigger
 

@@ -32,13 +32,16 @@ import string
 
 import supybot.conf as conf
 import supybot.registry as registry
+
 try:
     from supybot.i18n import PluginInternationalization
-    _ = PluginInternationalization('NoTrigger')
+
+    _ = PluginInternationalization("NoTrigger")
 except ImportError:
     # Placeholder that allows to run the plugin on a bot
     # without the i18n module
     _ = lambda x: x
+
 
 def configure(advanced):
     # This will be called by supybot to configure this module.  advanced is
@@ -46,39 +49,96 @@ def configure(advanced):
     # user or not.  You should effect your configuration by manipulating the
     # registry as appropriate.
     from supybot.questions import expect, anything, something, yn
-    conf.registerPlugin('NoTrigger', True)
+
+    conf.registerPlugin("NoTrigger", True)
 
 
-NoTrigger = conf.registerPlugin('NoTrigger')
-conf.registerChannelValue(NoTrigger, 'enable',
-    registry.Boolean(True, _("""Enable protection against triggering other bots.""")))
-conf.registerChannelValue(NoTrigger, 'spaceBeforeNicks',
-    registry.Boolean(False, _("""Add a space before messages beginning with
+NoTrigger = conf.registerPlugin("NoTrigger")
+conf.registerChannelValue(
+    NoTrigger,
+    "enable",
+    registry.Boolean(True, _("""Enable protection against triggering other bots.""")),
+)
+conf.registerChannelValue(
+    NoTrigger,
+    "spaceBeforeNicks",
+    registry.Boolean(
+        False,
+        _(
+            """Add a space before messages beginning with
         "blah: " or "blah, ", preventing the bot from triggering other bots that
-        respond to nick.""")))
+        respond to nick."""
+        ),
+    ),
+)
 
-conf.registerChannelValue(NoTrigger, 'colorAware',
-    registry.Boolean(True, _("""Toggles whether the bot should be aware of color-stripping
-        channel modes (+c or +S on most IRCds).""")))
-conf.registerChannelValue(NoTrigger.colorAware, 'modes',
-    registry.SpaceSeparatedListOfStrings("c S", _("""Defines a space-separated list of modes that should
+conf.registerChannelValue(
+    NoTrigger,
+    "colorAware",
+    registry.Boolean(
+        True,
+        _(
+            """Toggles whether the bot should be aware of color-stripping
+        channel modes (+c or +S on most IRCds)."""
+        ),
+    ),
+)
+conf.registerChannelValue(
+    NoTrigger.colorAware,
+    "modes",
+    registry.SpaceSeparatedListOfStrings(
+        "c S",
+        _(
+            """Defines a space-separated list of modes that should
         be treated as color-blocking modes. This is usually +c (block) and +S (stripcolour) on
-        UnrealIRCd/InspIRCd, and just +c (stripcolor) on charybdis-based daemons.""")))
+        UnrealIRCd/InspIRCd, and just +c (stripcolor) on charybdis-based daemons."""
+        ),
+    ),
+)
 
-conf.registerChannelValue(NoTrigger, 'blockCtcp',
-    registry.Boolean(False, _("""Determines whether the bot should block all outbound channel CTCPs
-        except CTCP actions. If you are using the Ctcp plugin, you will want to turn this off.""")))
+conf.registerChannelValue(
+    NoTrigger,
+    "blockCtcp",
+    registry.Boolean(
+        False,
+        _(
+            """Determines whether the bot should block all outbound channel CTCPs
+        except CTCP actions. If you are using the Ctcp plugin, you will want to turn this off."""
+        ),
+    ),
+)
 
-conf.registerChannelValue(NoTrigger, 'prefixes',
-    registry.SpaceSeparatedListOfStrings(' '.join(string.punctuation),
-        _("""Defines a space-separated list of prefix triggers the bot should ignore.""")))
+conf.registerChannelValue(
+    NoTrigger,
+    "prefixes",
+    registry.SpaceSeparatedListOfStrings(
+        " ".join(string.punctuation),
+        _(
+            """Defines a space-separated list of prefix triggers the bot should ignore."""
+        ),
+    ),
+)
 
-conf.registerChannelValue(NoTrigger, 'suffixes',
-    registry.SpaceSeparatedListOfStrings('',
-        _("""Defines a space-separated list of suffix triggers the bot should ignore.""")))
+conf.registerChannelValue(
+    NoTrigger,
+    "suffixes",
+    registry.SpaceSeparatedListOfStrings(
+        "",
+        _(
+            """Defines a space-separated list of suffix triggers the bot should ignore."""
+        ),
+    ),
+)
 
-conf.registerChannelValue(NoTrigger, 'blockBell',
-    registry.Boolean(True,
-        _("""Determines whether the bot should strip bell characters (\x07) from any messages it sends.""")))
+conf.registerChannelValue(
+    NoTrigger,
+    "blockBell",
+    registry.Boolean(
+        True,
+        _(
+            """Determines whether the bot should strip bell characters (\x07) from any messages it sends."""
+        ),
+    ),
+)
 
 # vim:set shiftwidth=4 tabstop=4 expandtab textwidth=79:
