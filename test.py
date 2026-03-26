@@ -37,12 +37,12 @@ class NoTriggerTestCase(ChannelPluginTestCase):
               'supybot.plugins.notrigger.blockCtcp': True}
 
     def testSpaceBeforePrefixes(self):
-        self.assertNotRegexp('echo !test', '^!test$')
-        self.assertNotRegexp('echo $test', '^\$test$')
+        self.assertNotRegexp('echo !test', r'^!test$')
+        self.assertNotRegexp('echo $test', r'^\$test$')
 
     def testSpaceBeforeNicks(self):
-        self.assertNotRegexp('echo example: hello', '^example: hello$')
-        self.assertNotRegexp('echo user1, hello', '^user1, hello$')
+        self.assertNotRegexp('echo example: hello', r'^example: hello$')
+        self.assertNotRegexp('echo user1, hello', r'^user1, hello$')
 
     def testBlockCTCP(self):
         self.assertResponse('echo \x01PING abcd\x01', 'PING abcd')
@@ -54,14 +54,14 @@ class NoTriggerTestCase(ChannelPluginTestCase):
 
     def testConfigurablePrefixes(self):
         with conf.supybot.plugins.notrigger.prefixes.context("moo !"):
-            self.assertNotRegexp('echo moo test', '^moo test$')
-            self.assertNotRegexp('echo !test', '^!test$')
+            self.assertNotRegexp('echo moo test', r'^moo test$')
+            self.assertNotRegexp('echo !test', r'^!test$')
             self.assertResponse('echo .test', '.test')
 
     def testConfigurableSuffixes(self):
         with conf.supybot.plugins.notrigger.suffixes.context("abcd +"):
-            self.assertNotRegexp('echo moo test+', '^moo test+$')
-            self.assertNotRegexp('echo 1234 abcd', '^!1234 abcd$')
+            self.assertNotRegexp('echo moo test+', r'^moo test+$')
+            self.assertNotRegexp('echo 1234 abcd', r'^!1234 abcd$')
             self.assertResponse('echo test-', 'test-')
 
 # vim:set shiftwidth=4 tabstop=4 expandtab textwidth=79:
